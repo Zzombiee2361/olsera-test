@@ -1,17 +1,17 @@
+<script setup>
+import { api } from 'src/boot/axios'
+import PostLoader from 'src/components/PostLoader.vue'
+
+const limit = 15
+
+async function fetchData (page) {
+  const { data } = await api.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${limit}`)
+  return data
+}
+</script>
+
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+  <q-page class="container flex flex-center">
+    <PostLoader :fetch-data="fetchData" />
   </q-page>
 </template>
-
-<script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'IndexPage'
-})
-</script>

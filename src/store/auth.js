@@ -15,7 +15,11 @@ export default {
   mutations: {
     setUser (state, user) {
       state.user = user
-      window.localStorage.setItem('app.auth', JSON.stringify(user))
+      if (user === null) {
+        window.localStorage.removeItem('app.auth')
+      } else {
+        window.localStorage.setItem('app.auth', JSON.stringify(user))
+      }
     }
   }
 }

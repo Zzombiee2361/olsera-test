@@ -1,3 +1,45 @@
+<script setup>
+import { computed, ref } from 'vue'
+import NavLink from 'components/NavLink.vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+const store = useStore()
+const router = useRouter()
+const user = computed(() => store.state.auth.user)
+
+const linksList = computed(() => [
+  {
+    title: 'Home',
+    icon: 'dashboard',
+    to: { name: 'home' },
+    exact: true
+  },
+  {
+    title: 'Liked Post',
+    icon: 'favorite',
+    to: { name: 'liked-posts' }
+  },
+  ...(user.value ? [{
+    title: 'Admin',
+    icon: 'article',
+    to: { name: 'admin' }
+  }] : [])
+])
+
+const leftDrawerOpen = ref(false)
+
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+function logout () {
+  store.commit('auth/setUser', null)
+  router.push({ name: 'login' })
+}
+
+</script>
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
@@ -15,7 +57,12 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn v-if="user" flat @click="logout">
+          Logout
+        </q-btn>
+        <q-btn v-else flat :to="{ name: 'login' }">
+          Login
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -38,33 +85,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import NavLink from 'components/NavLink.vue'
-
-const linksList = [
-  {
-    title: 'Home',
-    icon: 'dashboard',
-    to: { name: 'home' },
-    exact: true
-  },
-  {
-    title: 'Liked Post',
-    icon: 'favorite',
-    to: { name: 'liked-posts' }
-  },
-  {
-    title: 'Admin',
-    icon: 'article',
-    to: { name: 'admin' }
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
-</script>

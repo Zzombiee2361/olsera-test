@@ -1,4 +1,4 @@
-import { getAuthMiddleware } from './middleware/auth'
+import auth from './middleware/auth'
 
 /** @type {import('vue-router').RouteRecordRaw[]} */
 const routes = [
@@ -30,21 +30,17 @@ const routes = [
           { path: 'post/create', name: 'admin.create', component: () => import('src/components/PostForm.vue') },
           { path: 'post/:id', name: 'admin.view', component: () => import('src/components/PostView.vue') },
           { path: 'post/:id/edit', name: 'admin.edit', component: () => import('src/components/PostForm.vue') }
-        ]
+        ],
+        meta: {
+          middleware: auth
+        }
+      },
+      {
+        path: '/login',
+        name: 'login',
+        component: () => import('pages/Auth/LoginPage.vue')
       }
-    ],
-    meta: {
-      middleware: getAuthMiddleware({ checkLogin: true })
-    }
-  },
-
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/LoginPage.vue'),
-    meta: {
-      middleware: getAuthMiddleware({ checkLogin: false })
-    }
+    ]
   },
 
   // Always leave this as last one,

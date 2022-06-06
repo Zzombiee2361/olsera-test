@@ -9,6 +9,10 @@ const props = defineProps({
   fetchData: {
     type: Function,
     required: true
+  },
+  detailRoute: {
+    type: String,
+    required: true
   }
 })
 
@@ -37,6 +41,13 @@ async function fetchNext () {
     loading.value = false
   }
 }
+
+function removePost (post) {
+  const idx = posts.value.findIndex((findPost) => findPost.id === post.id)
+  if (idx >= 0) {
+    posts.value.splice(idx, 1)
+  }
+}
 </script>
 
 <template>
@@ -46,9 +57,13 @@ async function fetchNext () {
       :key="post.id"
       :post="post"
       :liked="likedPosts.has(post.id)"
-      :to="{ name: 'home.view', params: { id: post.id } }"
+      :to="{ name: props.detailRoute, params: { id: post.id } }"
       @click:like="togglePostLike($event, post)"
-    />
+    >
+      <template #action="attrs">
+        <slot name="action" v-bind="{ ...attrs, removePost }" />
+      </template>
+    </PostCard>
     <div v-if="loading" class="row justify-center q-py-lg">
       <q-spinner color="primary" size="3em" />
     </div>

@@ -9,7 +9,7 @@ const props = defineProps({
   },
   liked: {
     type: Boolean,
-    required: true
+    default: false
   }
 })
 </script>
@@ -22,14 +22,15 @@ const props = defineProps({
     </q-item-section>
 
     <q-item-section side>
-      <div></div>
-      <q-btn
-        :color="liked ? 'red' : null"
-        :icon="liked ? 'favorite' : 'favorite_border'"
-        flat
-        round
-        @click="emit('click:like', !liked, $event)"
-      />
+      <slot name="action" :post="post" :liked="liked">
+        <q-btn
+          :color="liked ? 'red' : null"
+          :icon="liked ? 'favorite' : 'favorite_border'"
+          flat
+          round
+          @click.stop.prevent="emit('click:like', !liked, $event)"
+        />
+      </slot>
     </q-item-section>
   </q-item>
 </template>

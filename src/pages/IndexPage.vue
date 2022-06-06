@@ -13,6 +13,6 @@ async function fetchData (page) {
 <template>
   <q-page class="container">
     <router-view />
-    <PostLoader :fetch-data="fetchData" />
+    <PostLoader :fetch-data="fetchData" detail-route="home.view" />
   </q-page>
 </template>

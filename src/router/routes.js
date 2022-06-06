@@ -25,9 +25,11 @@ const routes = [
       {
         path: 'admin',
         name: 'admin',
-        component: () => import('pages/IndexPage.vue'),
+        component: () => import('pages/AdminIndex.vue'),
         children: [
-          { path: 'post/:id', name: 'admin.view', component: () => import('src/components/PostView.vue') }
+          { path: 'post/create', name: 'admin.create', component: () => import('src/components/PostForm.vue') },
+          { path: 'post/:id', name: 'admin.view', component: () => import('src/components/PostView.vue') },
+          { path: 'post/:id/edit', name: 'admin.edit', component: () => import('src/components/PostForm.vue') }
         ]
       }
     ],

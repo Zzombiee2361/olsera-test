@@ -21,8 +21,10 @@ function setOpen (isOpen) {
 
 watch(postId, async () => {
   open.value = false
-  const { data } = await api.get(`https://jsonplaceholder.typicode.com/posts/${postId.value}`)
-  post.value = data
+  if (postId.value) {
+    const { data } = await api.get(`https://jsonplaceholder.typicode.com/posts/${postId.value}`)
+    post.value = data
+  }
   open.value = true
 }, { immediate: true })
 </script>

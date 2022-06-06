@@ -11,6 +11,7 @@ const postId = computed(() => route.params.id)
 /** @type {import('src/types/post').Post} */
 const post = ref(null)
 const open = ref(false)
+const opening = ref(false)
 const title = ref(null)
 const body = ref(null)
 const user = computed(() => store.state.auth.user)
@@ -26,7 +27,8 @@ function setOpen (isOpen) {
 }
 
 watch(postId, async () => {
-  open.value = false
+  open.value = true
+  opening.value = true
   if (postId.value) {
     const { data } = await api.get(`https://jsonplaceholder.typicode.com/posts/${postId.value}`)
     post.value = data
@@ -36,7 +38,7 @@ watch(postId, async () => {
     title.value = null
     body.value = null
   }
-  open.value = true
+  opening.value = false
 }, { immediate: true })
 
 function submit () {
@@ -60,7 +62,12 @@ function submit () {
 
 <template>
   <q-dialog :model-value="open" @update:model-value="setOpen">
-    <q-card style="width: 600px">
+    <q-card v-if="opening" style="width: 300px">
+      <div class="row justify-center q-py-lg">
+      <q-spinner color="primary" size="3em" />
+      </div>
+    </q-card>
+    <q-card v-else style="width: 600px">
       <q-form @submit="submit">
         <q-card-section>
           <h4 class="q-mt-none">{{ post ? 'Update' : 'Create' }} Post</h4>

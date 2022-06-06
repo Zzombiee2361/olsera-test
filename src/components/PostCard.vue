@@ -15,7 +15,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <q-item v-bind="$attrs">
+  <q-item class="post-card" v-bind="$attrs">
     <q-item-section>
       <q-item-label>{{ props.post.title }}</q-item-label>
       <q-item-label caption :lines="2">{{ props.post.body }}</q-item-label>
@@ -34,3 +34,12 @@ const props = defineProps({
     </q-item-section>
   </q-item>
 </template>
+
+<style scoped>
+.post-card:nth-child(odd) {
+  background-color: #fff;
+}
+.post-card:nth-child(even) {
+  background-color: #eee;
+}
+</style>

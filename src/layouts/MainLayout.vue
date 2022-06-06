@@ -53,7 +53,7 @@ function logout () {
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title class="app-title">
           Quasar App
         </q-toolbar-title>
 
@@ -85,3 +85,10 @@ function logout () {
     </q-page-container>
   </q-layout>
 </template>
+
+<style scoped>
+.app-title {
+  font-weight: 600;
+  color: #fff;
+}
+</style>

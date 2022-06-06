@@ -8,8 +8,7 @@ export function useLikedPost () {
   // compromise need to be made since the alternative is fetching
   // post per id (too many requests) or requesting all posts then
   // filtering the data (too slow)
-  let likedPostsData = JSON.parse(window.localStorage.getItem('app.liked-posts-data') ?? '[]')
-  likedPostsData = ref(new Set(likedPostsData))
+  const likedPostsData = ref(JSON.parse(window.localStorage.getItem('app.liked-posts-data') ?? '[]'))
 
   function updateStorage () {
     window.localStorage.setItem('app.liked-posts', JSON.stringify([...likedPosts.value]))
@@ -18,13 +17,16 @@ export function useLikedPost () {
 
   function likePost (post) {
     likedPosts.value.add(post.id)
-    likedPostsData.value.add(post)
+    likedPostsData.value.push(post)
     updateStorage()
   }
 
   function unlikePost (post) {
     likedPosts.value.delete(post.id)
-    likedPostsData.value.delete(post)
+    const idx = likedPostsData.value.findIndex((p) => p.id === post.id)
+    if (idx >= 0) {
+      likedPostsData.value.splice(idx, 1)
+    }
     updateStorage()
   }
 

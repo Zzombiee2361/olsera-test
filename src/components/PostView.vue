@@ -2,13 +2,15 @@
 import { api } from 'src/boot/axios'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import PostComment from './PostComment.vue'
 
 const route = useRoute()
 const router = useRouter()
 const postId = computed(() => route.params.id)
 /** @type {import('src/types/post').Post} */
-const post = ref(null)
 const open = ref(false)
+const post = ref(null)
+const comments = ref([])
 
 function setOpen (isOpen) {
   open.value = isOpen
@@ -24,6 +26,8 @@ watch(postId, async () => {
   if (postId.value) {
     const { data } = await api.get(`https://jsonplaceholder.typicode.com/posts/${postId.value}`)
     post.value = data
+    const { data: commentData } = await api.get(`https://jsonplaceholder.typicode.com/posts/${postId.value}/comments`)
+    comments.value = commentData
   }
   open.value = true
 }, { immediate: true })
@@ -36,6 +40,18 @@ watch(postId, async () => {
         <h4 class="q-mt-none">{{ post.title }}</h4>
         <p>{{ post.body }}</p>
       </q-card-section>
+
+      <q-list v-if="comments.length" bordered>
+        <q-item-label header>
+          Comments
+        </q-item-label>
+
+        <PostComment
+          v-for="comment in comments"
+          :key="comment.id"
+          :comment="comment"
+        />
+      </q-list>
     </q-card>
   </q-dialog>
 </template>

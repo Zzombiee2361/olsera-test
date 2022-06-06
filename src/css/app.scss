@@ -1,1 +1,12 @@
 // app global css in SCSS form
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+@media (min-width: $breakpoint-md-min) {
+  .container {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

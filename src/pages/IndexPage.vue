@@ -11,7 +11,8 @@ async function fetchData (page) {
 </script>
 
 <template>
-  <q-page class="container flex flex-center">
+  <q-page class="container">
+    <router-view />
     <PostLoader :fetch-data="fetchData" />
   </q-page>
 </template>

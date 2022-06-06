@@ -15,7 +15,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <q-item @click="emit('click')">
+  <q-item v-bind="$attrs">
     <q-item-section>
       <q-item-label>{{ props.post.title }}</q-item-label>
       <q-item-label caption :lines="2">{{ props.post.body }}</q-item-label>

@@ -46,7 +46,8 @@ async function fetchNext () {
       :key="post.id"
       :post="post"
       :liked="likedPosts.has(post.id)"
-      @click:like="togglePostLike($event, post.id)"
+      :to="{ name: 'home.view', params: { id: post.id } }"
+      @click:like="togglePostLike($event, post)"
     />
     <div v-if="loading" class="row justify-center q-py-lg">
       <q-spinner color="primary" size="3em" />

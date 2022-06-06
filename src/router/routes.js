@@ -4,10 +4,32 @@ import { getAuthMiddleware } from './middleware/auth'
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
+      {
+        path: '',
+        name: 'home',
+        component: () => import('pages/IndexPage.vue'),
+        children: [
+          { path: '/post/:id', name: 'home.view', component: () => import('src/components/PostView.vue') }
+        ]
+      },
+      {
+        path: 'liked',
+        name: 'liked-posts',
+        component: () => import('pages/LikedPostPage.vue'),
+        children: [
+          { path: 'post/:id', name: 'liked-posts.view', component: () => import('src/components/PostView.vue') }
+        ]
+      },
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('pages/IndexPage.vue'),
+        children: [
+          { path: 'post/:id', name: 'admin.view', component: () => import('src/components/PostView.vue') }
+        ]
+      }
     ],
     meta: {
       middleware: getAuthMiddleware({ checkLogin: true })

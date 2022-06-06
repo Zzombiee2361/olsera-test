@@ -26,5 +26,41 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  function nextFactory (context, middleware, index) {
+    const subsequentMiddleware = middleware[index]
+    // If no subsequent Middleware exists,
+    // the default `next()` callback is returned.
+    if (!subsequentMiddleware) return context.next
+
+    return (...parameters) => {
+      // Run the default Vue Router `next()` callback first.
+      context.next(...parameters)
+      // Then run the subsequent Middleware with a new
+      // `nextMiddleware()` callback.
+      const nextMiddleware = nextFactory(context, middleware, index + 1)
+      subsequentMiddleware({ ...context, next: nextMiddleware })
+    }
+  }
+
+  Router.beforeEach((to, from, next) => {
+    if (to.meta.middleware) {
+      const middleware = Array.isArray(to.meta.middleware)
+        ? to.meta.middleware
+        : [to.meta.middleware]
+
+      const context = {
+        from,
+        next,
+        router: Router,
+        to
+      }
+      const nextMiddleware = nextFactory(context, middleware, 1)
+
+      return middleware[0]({ ...context, next: nextMiddleware })
+    }
+
+    return next()
+  })
+
   return Router
 })
